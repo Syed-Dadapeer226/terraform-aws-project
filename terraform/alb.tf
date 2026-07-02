@@ -35,7 +35,7 @@ resource "aws_lb" "alb" {
   internal           = var.internal
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb-sg.id]
-  subnets            = each.value
+  subnets            = ["$(each.value)"]
   enable_deletion_protection = false
   idle_timeout       = 60
 
@@ -53,7 +53,7 @@ resource "aws_lb_target_group" "alb-tg" {
     enabled     = true
     interval    = 30
     path        = "/"
-    port        = "traffic port" 
+    port        = "traffic-port" 
     protocol    = "HTTP"
     healthy_threshold = 3
     unhealthy_threshold = 3
@@ -81,7 +81,7 @@ resource "aws_lb_listener" "listener" {
     if v.protocol == "HTTP"
   }
 
-  load_balancer_arn  = aws_lb.alb.arn
+  load_balancer_arn  = values(aws_lb.alb)[0].arn
   port               = each.value.port
   protocol           = "HTTP"
   default_action {

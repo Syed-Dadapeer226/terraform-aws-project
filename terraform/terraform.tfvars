@@ -25,18 +25,23 @@ private_subnets = {
     az   = "ap-south-1a"
   }
 
-#   private-b = {
-#     cidr = "10.0.102.0/24"
-#     az   = "ap-south-1b"
-#   }
+  private-b = {
+    cidr = "10.0.102.0/24"
+    az   = "ap-south-1b"
+  }
 }
 
 # EC2
-instance_names = [
-  "web-01",
-  "web-02",
-  #"web-03"
-]
+instance_names = {
+  web-01 = {
+    private_subnet = "private-a"
+  }
+
+  web-02 = {
+    private_subnet = "private-b"
+  }
+
+}
 
 key_name = "my-keypair"
 

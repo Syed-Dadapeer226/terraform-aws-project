@@ -3,7 +3,7 @@ output "account_id" {
 }
 
 output "region" {
-  value = data.aws_region.current.name
+  value = data.aws_region.current.region
 }
 
 # VPC
@@ -41,5 +41,10 @@ output "private_ips" {
 
 # ALB
 output "alb_dns_name" {
-  value = aws_lb.alb.dns_name
+
+  value = {
+    for k, v in aws_lb.alb :
+    k => v.dns_name
+  }
+  
 }

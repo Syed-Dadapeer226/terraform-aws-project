@@ -1,13 +1,14 @@
 #!/bin/bash
-apt update
-apt install -y apache2
+
+dnf update
+dnf install -y apache2
 
 # Get the instance ID using the instance metadata
 INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 INSTANCE_HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/hostname)
 
 # Install the AWS CLI
-apt install -y awscli
+dnf install -y awscli
 
 # Download the images from S3 bucket
 # aws s3 cp s3://terraform-aws-s3-bucket-2026/project.webp /var/www/html/project.png --acl public-read

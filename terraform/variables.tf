@@ -48,12 +48,9 @@ variable "instance_type" {
 }
 
 variable "instance_names" {
-  type = set(string)
-
-  default = [
-    "web-01",
-    "web-02"
-  ]
+  type = map(object({
+    private_subnet = string
+  }))
 }
 
 variable "allowed_ports" {
