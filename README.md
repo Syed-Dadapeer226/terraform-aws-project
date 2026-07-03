@@ -55,6 +55,7 @@ terraform/
 ├── alb.tf
 ├── data.tf
 ├── ec2.tf
+├── keypair.tf
 ├── locals.tf
 ├── outputs.tf
 ├── provider.tf
