@@ -46,5 +46,5 @@ output "alb_dns_name" {
     for k, v in aws_lb.alb :
     k => v.dns_name
   }
-  
+
 }

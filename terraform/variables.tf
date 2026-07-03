@@ -8,7 +8,7 @@ variable "project_name" {
 }
 
 variable "environment" {
-  type = string
+  type    = string
   default = "dev"
 }
 
@@ -49,17 +49,13 @@ variable "instance_type" {
 
 variable "instance_names" {
   type = map(object({
-    private_subnet = string
+    subnet = string
   }))
 }
 
 variable "allowed_ports" {
   type    = list(number)
-  default = [22, 80]
-}
-
-variable "key_name" {
-  type = string
+  default = [80]
 }
 
 # ALB

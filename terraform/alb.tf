@@ -9,11 +9,11 @@ resource "aws_security_group" "alb-sg" {
     for_each = var.listeners
 
     content {
-      description  = ingress.key
-      from_port    = ingress.value.port
-      to_port      = ingress.value.port
-      protocol     = "tcp"
-      cidr_blocks  = var.allowed_cidrs
+      description = ingress.key
+      from_port   = ingress.value.port
+      to_port     = ingress.value.port
+      protocol    = "tcp"
+      cidr_blocks = var.allowed_cidrs
     }
 
   }
@@ -31,34 +31,34 @@ resource "aws_security_group" "alb-sg" {
 resource "aws_lb" "alb" {
   for_each = var.public_subnets
 
-  name               = "${var.project_name}-alb"
-  internal           = var.internal
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb-sg.id]
-  subnets            = ["$(each.value)"]
+  name                       = "${var.project_name}-alb"
+  internal                   = var.internal
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.alb-sg.id]
+  subnets                    = ["$(each.value)"]
   enable_deletion_protection = false
-  idle_timeout       = 60
+  idle_timeout               = 60
 
 }
 
 # Target Group
 resource "aws_lb_target_group" "alb-tg" {
 
-  name           = "${var.project_name}-tg"
-  port           = 80
-  protocol       = "HTTP"
-  target_type    = "instance"
-  vpc_id         = aws_vpc.my-vpc.id
+  name        = "${var.project_name}-tg"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "instance"
+  vpc_id      = aws_vpc.my-vpc.id
   health_check {
-    enabled     = true
-    interval    = 30
-    path        = "/"
-    port        = "traffic-port" 
-    protocol    = "HTTP"
-    healthy_threshold = 3
+    enabled             = true
+    interval            = 30
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    healthy_threshold   = 3
     unhealthy_threshold = 3
-    timeout     = 5
-    matcher     = "200"
+    timeout             = 5
+    matcher             = "200"
   }
 
 }
@@ -81,9 +81,9 @@ resource "aws_lb_listener" "listener" {
     if v.protocol == "HTTP"
   }
 
-  load_balancer_arn  = values(aws_lb.alb)[0].arn
-  port               = each.value.port
-  protocol           = "HTTP"
+  load_balancer_arn = values(aws_lb.alb)[0].arn
+  port              = each.value.port
+  protocol          = "HTTP"
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb-tg.arn

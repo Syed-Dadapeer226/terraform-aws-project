@@ -13,10 +13,10 @@ public_subnets = {
     az   = "ap-south-1a"
   }
 
-#   public-b = {
-#     cidr = "10.0.2.0/24"
-#     az   = "ap-south-1b"
-#   }
+  #   public-b = {
+  #     cidr = "10.0.2.0/24"
+  #     az   = "ap-south-1b"
+  #   }
 }
 
 private_subnets = {
@@ -33,20 +33,18 @@ private_subnets = {
 
 # EC2
 instance_names = {
+
   web-01 = {
-    private_subnet = "private-a"
+    subnet = "private-a"
   }
 
   web-02 = {
-    private_subnet = "private-b"
+    subnet = "private-b"
   }
 
 }
 
-key_name = "my-keypair"
-
 allowed_ports = [
-  22,
   80
 ]
 

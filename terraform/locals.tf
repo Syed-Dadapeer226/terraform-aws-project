@@ -9,3 +9,7 @@ locals {
   }
 
 }
+
+locals {
+  first_public_subnet = values(aws_subnet.public-subnet)[0].id
+}
