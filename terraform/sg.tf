@@ -1,6 +1,6 @@
 # Security Group for only "Bastion Host"
 resource "aws_security_group" "bastion-sg" {
-  name        = "$(var.project_name)-bastion-sg"
+  name        = "${var.project_name}-bastion-sg"
   description = "Bastion Host Security Group"
   vpc_id      = aws_vpc.my-vpc.id
 
@@ -28,7 +28,7 @@ resource "aws_security_group" "bastion-sg" {
 
 # Security Group for "all other instances" except "Bastion Host"
 resource "aws_security_group" "web-sg" {
-  name        = "$(var.project_name)-sg"
+  name        = "${var.project_name}-web-sg"
   description = "EC2 Security Group"
   vpc_id      = aws_vpc.my-vpc.id
 
@@ -39,7 +39,7 @@ resource "aws_security_group" "web-sg" {
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
+      security_groups = [aws_security_group.alb-sg.id]
     }
   }
 
@@ -60,7 +60,7 @@ resource "aws_security_group" "web-sg" {
   }
 
   tags = {
-    Name = "${local.name}-instance-sg"
+    Name = "${local.name}-web-sg"
   }
 
 }

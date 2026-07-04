@@ -19,7 +19,7 @@ resource "aws_instance" "ec2-server" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.private-subnet[each.value.subnet].id
-  vpc_security_group_ids = [aws_security_group.web-sg.id]
+  vpc_security_group_ids = [aws_security_group.web-sg.id, aws_security_group.alb-sg.id]
   key_name               = aws_key_pair.key_pair.key_name
   user_data_base64       = base64encode(file("userdata.sh"))
 

@@ -13,10 +13,10 @@ public_subnets = {
     az   = "ap-south-1a"
   }
 
-  #   public-b = {
-  #     cidr = "10.0.2.0/24"
-  #     az   = "ap-south-1b"
-  #   }
+  public-b = {
+    cidr = "10.0.2.0/24"
+    az   = "ap-south-1b"
+  }
 }
 
 private_subnets = {

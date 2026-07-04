@@ -29,13 +29,11 @@ resource "aws_security_group" "alb-sg" {
 
 # ALB
 resource "aws_lb" "alb" {
-  for_each = var.public_subnets
-
   name                       = "${var.project_name}-alb"
   internal                   = var.internal
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.alb-sg.id]
-  subnets                    = ["$(each.value)"]
+  subnets                    = values(aws_subnet.public-subnet)[*].id
   enable_deletion_protection = false
   idle_timeout               = 60
 
@@ -81,7 +79,7 @@ resource "aws_lb_listener" "listener" {
     if v.protocol == "HTTP"
   }
 
-  load_balancer_arn = values(aws_lb.alb)[0].arn
+  load_balancer_arn = aws_lb.alb.arn
   port              = each.value.port
   protocol          = "HTTP"
   default_action {

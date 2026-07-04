@@ -11,8 +11,21 @@ output "vpc_id" {
   value = aws_vpc.my-vpc.id
 }
 
-# EC2
-output "instance_ids" {
+# Bastion Host
+output "bastion_instance_id" {
+
+  value = aws_instance.bastion-host.id
+
+}
+
+output "bastion_public_ip" {
+
+  value = aws_instance.bastion-host.public_ip
+
+}
+
+# Web Instances
+output "web_instance_ids" {
 
   value = {
     for k, v in aws_instance.ec2-server :
@@ -21,16 +34,7 @@ output "instance_ids" {
 
 }
 
-output "public_ips" {
-
-  value = {
-    for k, v in aws_instance.ec2-server :
-    k => v.public_ip
-  }
-
-}
-
-output "private_ips" {
+output "web_private_ips" {
 
   value = {
     for k, v in aws_instance.ec2-server :
@@ -42,9 +46,6 @@ output "private_ips" {
 # ALB
 output "alb_dns_name" {
 
-  value = {
-    for k, v in aws_lb.alb :
-    k => v.dns_name
-  }
+  value = aws_lb.alb.dns_name
 
 }
