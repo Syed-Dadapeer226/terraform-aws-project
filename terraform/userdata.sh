@@ -1,20 +1,22 @@
 #!/bin/bash
 
-dnf update
-dnf install -y apache2
+sudo dnf update -y
+sudo dnf install -y httpd
 
 # Get the instance ID using the instance metadata
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-INSTANCE_HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/hostname)
+INSTANCE_REGION=$(TOKEN=$(curl -s -X PUT http://169.254.169.254/latest/api/token \
+-H "X-aws-ec2-metadata-token-ttl-seconds:21600") && curl -s -H "X-aws-ec2-metadata-token:$TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
+INSTANCE_IP=$(TOKEN=$(curl -s -X PUT http://169.254.169.254/latest/api/token \
+-H "X-aws-ec2-metadata-token-ttl-seconds:21600") && curl -s -H "X-aws-ec2-metadata-token:$TOKEN" http://169.254.169.254/latest/meta-data/hostname | cut -d "." -f 1 | cut -d "-" -f 2-5 | sed "s/-/./g")
 
 # Install the AWS CLI
-dnf install -y awscli
+sudo dnf install -y awscli
 
 # Download the images from S3 bucket
 # aws s3 cp s3://terraform-aws-s3-bucket-2026/project.webp /var/www/html/project.png --acl public-read
 
 # Create a simple HTML file with the portfolio content and display the images
-cat <<EOF > /var/www/html/index.html
+sudo cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,13 +208,13 @@ font-size:20px;
 <div class="info-grid">
 
 <div class="info-box">
-<div class="label">Instance Hostname</div>
-<div class="value">$INSTANCE_HOSTNAME</div>
+<div class="label">EC2 Instance - REGION (AZ)</div>
+<div class="value">$INSTANCE_REGION</div>
 </div>
 
 <div class="info-box">
-<div class="label">EC2 Instance ID</div>
-<div class="value">$INSTANCE_ID</div>
+<div class="label">EC2 Instance - IP Address</div>
+<div class="value">$INSTANCE_IP</div>
 </div>
 
 </div>
@@ -256,5 +258,5 @@ Powered by <strong>Terraform</strong> • <strong>AWS</strong> • Infrastructur
 EOF
 
 # Start Apache and enable it on boot
-systemctl start apache2
-systemctl enable apache2
+sudo systemctl start httpd
+sudo systemctl enable httpd

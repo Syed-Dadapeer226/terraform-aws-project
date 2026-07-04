@@ -39,7 +39,7 @@ resource "aws_security_group" "web-sg" {
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
-      security_groups = [aws_security_group.alb-sg.id]
+      cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
